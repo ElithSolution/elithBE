@@ -315,6 +315,7 @@ public class ClientDAO {
             result = prepStmt.executeQuery();
             if (result.next()) {
                 res = result.getInt("MaxId");
+                System.out.println("Max clé : " + res);
             }
 
         } catch (SQLException e) {
@@ -336,18 +337,21 @@ public class ClientDAO {
     }
 
     
-    public int existeClient(String nom, String prenom, java.sql.Date date, int idClinique) throws DAOException {
+    public int existeClient(String nom, String prenom, String date, int idClinique) throws DAOException {
         int idClient = -1 ;
         Connection con = getConnection();
         PreparedStatement prepStmt = null;
         ResultSet result;
+        
+        java.util.Date dateNais = ConversionType.StringToDate(date);
+        java.sql.Date dateNaisSQL = new java.sql.Date(dateNais.getTime());
           
         try {
             prepStmt = con.prepareStatement(CLIENT_EXISTE);
             int n = 1;
             prepStmt.setString(n++, nom);
             prepStmt.setString(n++, prenom);
-            prepStmt.setDate(n++, date);
+            prepStmt.setDate(n++, dateNaisSQL);
             prepStmt.setInt(n++, idClinique);
             result = prepStmt.executeQuery();
             if (result.next()) {
@@ -406,10 +410,13 @@ public class ClientDAO {
         Connection con = getConnection();
         PreparedStatement prepStmt = null;
 
+        java.util.Date dateNais = ConversionType.StringToDate(client.getDateNaissanceString());
+        java.sql.Date dateNaisSQL = new java.sql.Date(dateNais.getTime());
+        
         try {
             
             int id = this.maxCle() + 1 ;
-             
+                        
             prepStmt = con.prepareStatement(CLIENT_INSERT);
             int n = 1;
 
@@ -421,7 +428,7 @@ public class ClientDAO {
             prepStmt.setString(n++, client.getCodePostal());
             prepStmt.setString(n++, client.getTelephone());
             prepStmt.setString(n++, client.getEmail());
-            prepStmt.setDate(n++, client.getDateNaissanceSql());
+            prepStmt.setDate(n++, dateNaisSQL);
             prepStmt.setInt(n++, client.getEnfants());
             prepStmt.setString(n++, client.getEmploi());
             prepStmt.setString(n++, client.getLoisirs());
@@ -439,15 +446,17 @@ public class ClientDAO {
             prepStmt.setString(n++, client.getHistoDouleur());
             prepStmt.setString(n++, client.getConstatations());
             prepStmt.setString(n++, client.getAttentions());
-            prepStmt.setString(n++, client.getPasMasser());
-            
+            prepStmt.setString(n++, client.getPasMasser());            
             prepStmt.setBoolean(n++, client.getFumeur());
             prepStmt.setBoolean(n++, client.getPeau());
             prepStmt.setBoolean(n++, client.getArthrose());
             prepStmt.setBoolean(n++, client.getOsteoporose());
             prepStmt.setString(n++, client.getNote());
-            prepStmt.setString(n++, client.getConstipation());            
+            prepStmt.setString(n++, client.getConstipation());      
             
+            prepStmt.setInt(n++, client.getIdClinique());
+            
+            System.out.println("Requête : " + prepStmt);
             prepStmt.executeUpdate();
 
         } catch (SQLException e) {

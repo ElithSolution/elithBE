@@ -18,6 +18,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
@@ -76,8 +77,82 @@ public class ClientResource {
         return clientToJSON(client, error);
     }
 
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public ItemClientJSON postJson(@Context SecurityContext securityContext, Client client) {
+        int idClinique = UtilitaireAPI.extractIdClinique(securityContext);
+        ClientAbstract clientMaJ = new ClientNull(); 
+        int existeDeja ;
+        
+        try{
+            
+            if(client != null){
+                
+                System.out.println("client  nom : "+ client.getNom());
+                System.out.println("client  prénom : "+ client.getPrenom());
+                System.out.println("client  adresse : "+ client.getAdresse());
+                System.out.println("client  ville : "+ client.getVille());
+                System.out.println("client  code postal : "+ client.getCodePostal());
+                System.out.println("client  tel : "+ client.getTelephone());
+                System.out.println("client  email : "+ client.getEmail());
+                System.out.println("client  dateNaissance : "+ client.getDateNaissanceString());
+                System.out.println("client  enfant : "+ client.getEnfants());
+                System.out.println("client  emploi : "+ client.getEmploi());
+                System.out.println("client  loisirs : "+ client.getLoisirs());
+                System.out.println("client  referé : "+ client.getRefere());
+                System.out.println("client  autres : "+ client.getAutresTherapies());
+                System.out.println("client  medicaments : "+ client.getMedicaments());
+                System.out.println("client  complement : "+ client.getComplements());
+                System.out.println("client  cardiaque : "+ client.getCardiaque());
+                System.out.println("client  hypo : "+ client.getHypoglycemie());
+                System.out.println("client  asthme : "+ client.getAsthme());
+                System.out.println("client  diabete : "+ client.getDiabete());
+                System.out.println("client  allergie : "+ client.getAllergies());
+                System.out.println("client  autre : "+ client.getAutre());
+                System.out.println("client  histoOp : "+ client.getHistoOperations());
+                System.out.println("client  histoDouleur : "+ client.getHistoDouleur());
+                System.out.println("client  consta : "+ client.getConstatations());
+                System.out.println("client  attentions : "+ client.getAttentions());
+                System.out.println("client  pas masser : "+ client.getPasMasser());
+                System.out.println("client  fumeur : "+ client.getFumeur());
+                System.out.println("client  peau : "+ client.getPeau());
+                System.out.println("client  arthrose : "+ client.getArthrose());
+                System.out.println("client  osteoporose : "+ client.getOsteoporose());
+                System.out.println("client  note : "+ client.getNote());
+                System.out.println("client  constipation : "+ client.getConstipation());
+        
+                System.out.println("client  clinique : "+ client.getIdClinique());
+                
+                 clientDAO = new ClientDAO();
+                 
+                // on verifie que le client n'existe pas deja
+                existeDeja = clientDAO.existeClient(client.getNom().toLowerCase(), client.getPrenom().toLowerCase(), client.getDateNaissanceString(), client.getIdClinique()); 
+                if(existeDeja != -1) {
+                    error = new ErrorResponse(405, Response.Status.METHOD_NOT_ALLOWED);
+                }else {
+             
+                    // ajout du client
+                    client.setIdClinique(idClinique);
+                    clientDAO.create(client);
+                    int cle = clientDAO.maxCle();
+                    System.out.println("Clé : " + cle);
+                    client.setId(cle);
+
+                    clientMaJ = getClient(String.valueOf(client.getId()), idClinique, client.getTraitements());
+                    if(clientMaJ.isNil())error = new ErrorResponse(403, Response.Status.FORBIDDEN);
+                }
+                
+            }          
+          
+        } catch (DAOException e) {
+            error = new ErrorResponse(404, Response.Status.NOT_FOUND);   
+        } 
+       
+        return clientToJSON(clientMaJ, error);
+    }
     
-      /**
+     /**
      * PUT method for updating or creating an instance of ClientsResource
      * @param securityContext
      * @param client
