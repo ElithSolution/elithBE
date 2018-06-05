@@ -345,6 +345,8 @@ public class ClientDAO {
         
         java.util.Date dateNais = ConversionType.StringToDate(date);
         java.sql.Date dateNaisSQL = new java.sql.Date(dateNais.getTime());
+        
+        System.out.println("date naissance sql : " + dateNaisSQL);
           
         try {
             prepStmt = con.prepareStatement(CLIENT_EXISTE);
@@ -353,6 +355,7 @@ public class ClientDAO {
             prepStmt.setString(n++, prenom);
             prepStmt.setDate(n++, dateNaisSQL);
             prepStmt.setInt(n++, idClinique);
+            System.out.println(prepStmt);
             result = prepStmt.executeQuery();
             if (result.next()) {
                 idClient = result.getInt("idclient");
@@ -421,7 +424,7 @@ public class ClientDAO {
             int n = 1;
 
             prepStmt.setInt(n++, id);
-            prepStmt.setString(n++, client.getNom());
+            prepStmt.setString(n++, client.getNom().toUpperCase());
             prepStmt.setString(n++, client.getPrenom());
             prepStmt.setString(n++, client.getAdresse());
             prepStmt.setString(n++, client.getVille());

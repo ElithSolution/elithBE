@@ -122,14 +122,15 @@ public class ClientResource {
                 System.out.println("client  note : "+ client.getNote());
                 System.out.println("client  constipation : "+ client.getConstipation());
         
-                System.out.println("client  clinique : "+ client.getIdClinique());
-                
+                               
                  clientDAO = new ClientDAO();
                  
                 // on verifie que le client n'existe pas deja
-                existeDeja = clientDAO.existeClient(client.getNom().toLowerCase(), client.getPrenom().toLowerCase(), client.getDateNaissanceString(), client.getIdClinique()); 
+                
+                existeDeja = clientDAO.existeClient(client.getNom().toLowerCase(), client.getPrenom().toLowerCase(), client.getDateNaissanceString(), idClinique); 
                 if(existeDeja != -1) {
                     error = new ErrorResponse(405, Response.Status.METHOD_NOT_ALLOWED);
+                    clientMaJ = getClient(String.valueOf(existeDeja), idClinique, null);
                 }else {
              
                     // ajout du client
