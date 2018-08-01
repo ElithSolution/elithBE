@@ -8,8 +8,6 @@ package com.elith.client;
 import com.elith.API.UtilitaireAPI;
 import com.elith.authentification.Role;
 import com.elith.authentification.Secured;
-import com.elith.clinique.ItemAbstract;
-import com.elith.clinique.ItemJSON;
 import com.elith.connexion.DAOException;
 import com.elith.erreur.ErrorResponse;
 import java.util.ArrayList;
@@ -20,6 +18,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
@@ -71,6 +70,64 @@ public class TraitementResource {
         return traitement ;
     }
 
+    
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public ItemTraitementJSON postJson(@Context SecurityContext securityContext, Traitement traitement) {
+        int idClinique = UtilitaireAPI.extractIdClinique(securityContext);
+        int idUser = UtilitaireAPI.extractIdUser(securityContext);
+        TraitementAbstract traitementMaJ = new TraitementNull(); 
+               
+        try{
+            
+            if(traitement != null){
+                
+                System.out.println("traitement  raison : "+ traitement.getRaison());
+                System.out.println("traitement  traitement : "+ traitement.getTraitement());
+                System.out.println("traitement  conseils : "+ traitement.getConseils());
+                System.out.println("traitement  commentaires : "+ traitement.getCommentaires());
+                System.out.println("traitement  datevisite : "+ traitement.getDateVisiteString());
+                System.out.println("traitement  domicile : "+ traitement.getDomicile());
+                System.out.println("traitement  fraiskm : "+ traitement.getFraisKm());
+                System.out.println("traitement  km : "+ traitement.getKm());
+                System.out.println("traitement  domicile : "+ traitement.getDomicile());
+                System.out.println("traitement  tarif : "+ traitement.getTarif());
+            
+                System.out.println("traitement  tps : "+ traitement.getTps());
+                System.out.println("traitement  tvq : "+ traitement.getTvq());
+                System.out.println("traitement  certif : "+ traitement.getNumCertificat());
+                System.out.println("traitement  archive : "+ traitement.getArchive());
+                System.out.println("traitement  idclient : "+ traitement.getIdClient());
+                System.out.println("traitement  mode de paiement : "+ traitement.getModePaiement());
+                System.out.println("traitement  prix : "+ traitement.getPrix());
+                
+                
+                          
+                 traitementDAO = new TraitementDAO();
+                      
+                // ajout des informations complémentaires
+                traitement.setIdClinique(idClinique);
+                traitement.setLogin(idUser);
+                
+          
+                // ajout du traitement
+                traitementDAO.create(traitement);
+                System.out.println("traitement créé");
+                int cle = traitementDAO.maxCle();
+                traitement.setId(cle);
+                traitementMaJ = getTraitement(String.valueOf(traitement.getId()), idClinique);
+                if(traitementMaJ.isNil())error = new ErrorResponse(403, Response.Status.FORBIDDEN);                
+                
+            }          
+          
+        } catch (DAOException e) {
+            error = new ErrorResponse(404, Response.Status.NOT_FOUND);   
+        } 
+       
+        return traitementToJSON(traitementMaJ, error);
+    }
+    
     /**
      * PUT method for updating or creating an instance of TraitementResource
      * @param securityContext
@@ -104,7 +161,6 @@ public class TraitementResource {
             error = new ErrorResponse(404, Response.Status.NOT_FOUND);   
         }  
        
-        System.out.println("itemJSON " +traitementToJSON(traitementMaJ, error));
         return traitementToJSON(traitementMaJ, error);
     }
     

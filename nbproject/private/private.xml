@@ -12,15 +12,10 @@
     </editor-bookmarks>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Projets/MesProjets/Elith/src/java/com/elith/client/ClientDAO.java</file>
-            <file>file:/C:/Projets/MesProjets/Elith/src/java/com/elith/authentification/Token.java</file>
-            <file>file:/C:/Projets/MesProjets/Elith/src/java/com/elith/authentification/TokenJSON.java</file>
-            <file>file:/C:/Projets/MesProjets/Elith/src/java/com/elith/client/ClientResource.java</file>
-            <file>file:/C:/Projets/MesProjets/Elith/src/java/com/elith/API/UtilitaireAPI.java</file>
-            <file>file:/C:/Projets/MesProjets/Elith/src/java/com/elith/authentification/AuthorizationFilter.java</file>
-            <file>file:/C:/Projets/MesProjets/Elith/src/java/com/elith/clinique/ItemAbstract.java</file>
-            <file>file:/C:/Projets/MesProjets/Elith/src/java/com/elith/client/ItemTraitementJSON.java</file>
-            <file>file:/C:/Projets/MesProjets/Elith/src/java/com/elith/clinique/ItemJSON.java</file>
+            <file>file:/C:/Projets/MesProjets/Elith/src/java/com/elith/authentification/Utilisateur.java</file>
+            <file>file:/C:/Projets/MesProjets/Elith/src/java/com/elith/authentification/AuthenticationEndPoint.java</file>
+            <file>file:/C:/Projets/MesProjets/Elith/src/java/com/elith/client/TraitementResource.java</file>
+            <file>file:/C:/Projets/MesProjets/Elith/src/java/com/elith/client/TraitementDAO.java</file>
         </group>
     </open-files>
 </project-private>

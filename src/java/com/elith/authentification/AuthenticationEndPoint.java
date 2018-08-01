@@ -3,6 +3,7 @@ package com.elith.authentification;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.elith.connexion.Constantes;
 import com.elith.connexion.DAOException;
 import com.elith.erreur.ErrorResponse;
@@ -17,6 +18,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+
+
 @Path("/authentication")
 public class AuthenticationEndPoint {
     
@@ -24,18 +27,13 @@ public class AuthenticationEndPoint {
     private UtilisateurDAO utilisateurDAO;
     private final ErrorResponse error = new ErrorResponse(401,Response.Status.UNAUTHORIZED);
 
-                     
+       
  
     @POST
     @Produces(value = {"application/json", "text/plain"})
     //@Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response authenticateUser(Credentials credentials) {
-        String token ;
-        TokenJSON tokenJSON ;
-        int idClinique ;
-        int idUser ;
-        Role role ;
+    public Response authenticateUser(Credentials credentials) {       
         UtilisateurAbstract user ;       
         
         try {
@@ -51,13 +49,14 @@ public class AuthenticationEndPoint {
                 
             }else{     
                 // Issue a token for the user
-                idClinique = user.getIdClinique();                
-                role = user.getRole();
-                idUser = user.getId(); // id du therapeuthe
+                int idClinique = user.getIdClinique();                
+                Role role = user.getRole();
+                int idUser = user.getId(); // id du therapeuthe
+                String prenom = user.getPrenom();
+              
                 
-                token = issueTokenHMAC256(Constantes.TOKEN_SECRET, username, idClinique, role.toString(), idUser) ;
-                tokenJSON = new TokenJSON(token);
-                System.out.println("  TOKENJSON : " + tokenJSON) ;
+                String token = issueTokenHMAC256(Constantes.TOKEN_SECRET, username, idClinique, role.toString(), idUser, prenom) ;
+                TokenJSON tokenJSON = new TokenJSON(token, prenom);
                 // Return the token on the response
                 return Response.ok(tokenJSON).build();
             }
@@ -88,6 +87,11 @@ public class AuthenticationEndPoint {
      * Generate the HMAC256 Token
      * @param secret
      *          Secret to generate the token
+     * @param username
+     * @param idClinique
+     * @param role
+     * @param idUser
+     * @param prenom
      * @return 
      *      Token as a String
      * @throws UnsupportedEncodingException
@@ -95,7 +99,7 @@ public class AuthenticationEndPoint {
      * @throws JWTVerificationException 
      *      Invalid Signing configuration / Couldn't convert Claims.
      */
-    public String issueTokenHMAC256(String secret, String username, int idClinique, String role, int idUser) 
+    public String issueTokenHMAC256(String secret, String username, int idClinique, String role, int idUser, String prenom) 
             throws UnsupportedEncodingException, JWTCreationException {
 
         String token="";           
@@ -108,6 +112,7 @@ public class AuthenticationEndPoint {
                         .withClaim("idClinique", idClinique)
                         .withClaim("role", role)
                         .withClaim("idUser", idUser)
+                        .withClaim("prenom", prenom)
                         .withIssuer("auth0")
                         .sign(algorithm);
         return token;

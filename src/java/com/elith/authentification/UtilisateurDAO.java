@@ -52,8 +52,7 @@ public class UtilisateurDAO {
     // AVEC VALIDATION DE LA CLINIQUE COMME SECURITÉ
     private static final String UTILISATEUR_FINDBY_ID_SECURED = "SELECT nom, prenom, email, login, motpasse, actif, idclinique, role FROM utilisateur "
                                                                     + "WHERE idutilisateur = ? AND idclinique = ?";
-    
-    
+ 
     
     private CnxPool cnxPool;
 
@@ -521,6 +520,7 @@ public class UtilisateurDAO {
 
         return utilisateur;
     }
+    
     
      public Utilisateur findById(int id, int idclinique) throws DAOException {
         Connection con = getConnection();

@@ -38,6 +38,13 @@ public class Token {
         return res ;
     }
     
+    public int getIdUserFromPrincipal(){
+        int res = -1 ;            
+        JsonObject obj = Json.createReader(new StringReader(principalUsername)).readObject() ;
+        if(obj != null) res = Integer.valueOf(obj.get("idUser").toString());
+        return res ;
+    }
+    
     public String getRoleFromPrincipal(){
         return getStringFromPrincipal("role");
     }

@@ -16,17 +16,21 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class TokenJSON implements Serializable{
     
     private String accessToken ;
+    private String prenomToken ;
     
     public TokenJSON(){
         
     }
     
-    public TokenJSON(String accessToken){
+    public TokenJSON(String accessToken, String prenomToken){
         this.accessToken = accessToken ;
+        this.prenomToken = prenomToken ;
     }
     
     public String getAccessToken(){return this.accessToken;}
+    public String getPrenomToken(){return this.prenomToken;}
     public void setAccessToken(String accessToken){this.accessToken = accessToken ; }
+    public void setPrenomToken(String prenomToken){this.prenomToken = prenomToken ; }
     
     
     

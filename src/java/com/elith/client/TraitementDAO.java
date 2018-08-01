@@ -22,9 +22,7 @@ import java.util.List;
 
 public class TraitementDAO {
 
-    private static final String TRAITEMENT_INSERT = "INSERT INTO traitement (idtraitement, idclient, date, raison, traitement, " +
-            "conseils, commentaires, login, prix, modepaiement, km, domicile, tarif, fraiskm, tps, tvq, numcertificat, archive) " +
-            "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";       
+          
     private static final String TRAITEMENT_UPDATE = "UPDATE traitement set idclient = ?, date = ?, raison = ?, traitement = ?, " +
             "conseils = ?, commentaires = ?, login = ?, prix = ?, modepaiement = ?, km = ?, domicile = ?, tarif = ?, fraiskm = ?, " +
             "tps = ?, tvq = ?, numcertificat = ?, archive = ? " +
@@ -35,6 +33,9 @@ public class TraitementDAO {
     private static final String TRAITEMENT_EXISTE_BYID = "SELECT date FROM traitement WHERE idtraitement = ?" ;
     
     // AVEC VALIDATION DE LA CLINIQUE COMME SECURITÉ
+    private static final String TRAITEMENT_INSERT = "INSERT INTO traitement (idtraitement, idclient, date, raison, traitement, " +
+            "conseils, commentaires, login, prix, modepaiement, km, domicile, tarif, fraiskm, tps, tvq, numcertificat, archive, idclinique) " +
+            "VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"; 
     private static final String TRAITEMENT_FIND_ALL = "SELECT idtraitement, idclient, date, raison, traitement, conseils, " +
             "commentaires, login, prix, modepaiement, km, domicile, tarif, fraiskm, tps, tvq, numcertificat, archive " +
             "FROM traitement " +
@@ -166,7 +167,7 @@ public class TraitementDAO {
 
         if(traitement != null){
         
-                java.util.Date dateVisite = traitement.getDateVisite();
+                 java.util.Date dateVisite = ConversionType.StringToDate(traitement.getDateVisiteString());
                 java.sql.Date dateVisiteSQL = new java.sql.Date(dateVisite.getTime());
 
                 try {
@@ -192,6 +193,8 @@ public class TraitementDAO {
                     prepStmt.setFloat(n++, traitement.getTvq());
                     prepStmt.setString(n++, traitement.getNumCertificat());
                     prepStmt.setBoolean(n++, traitement.getArchive());
+                    prepStmt.setInt(n++, traitement.getIdClinique());
+                    System.out.println(prepStmt);
                     prepStmt.executeUpdate();
 
                 } catch (SQLException e) {

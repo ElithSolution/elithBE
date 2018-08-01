@@ -121,23 +121,26 @@ public class AuthentificationFilter implements ContainerRequestFilter {
             Claim idCliniqueClaim = jwt.getClaim("idClinique");
             Claim roleClaim = jwt.getClaim("role");
             Claim idUserClaim = jwt.getClaim("idUser");
+            Claim prenomClaim = jwt.getClaim("prenom");
              
             if(usernameClaim != null && idCliniqueClaim != null && roleClaim != null)
                 resultat = UsernameIdCliniqueRoleToJSONString(usernameClaim.asString(), 
                                                                 idCliniqueClaim.asInt(), 
                                                                 roleClaim.asString(),
-                                                                idUserClaim.asInt());
+                                                                idUserClaim.asInt(),
+                                                                prenomClaim.asString());
             return resultat ;
 
     }
     
-    private String UsernameIdCliniqueRoleToJSONString(String username, int idClinique, String role, int idUser){
+    private String UsernameIdCliniqueRoleToJSONString(String username, int idClinique, String role, int idUser, String prenom){
         String resultat = "" ;       
         JsonObject model = Json.createObjectBuilder()
                             .add("username", username)
                             .add("idClinique", idClinique)
                             .add("role", role)
                             .add("idUser", idUser)
+                            .add("prenom", prenom)
                             .build();
         if (model != null) resultat = model.toString() ;
         System.out.println("Personne logguee : " + resultat) ;

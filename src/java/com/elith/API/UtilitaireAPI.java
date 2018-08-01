@@ -6,14 +6,12 @@
 package com.elith.API;
 
 import com.elith.authentification.Token;
-import com.elith.client.ItemTraitement;
-import com.elith.client.ItemTraitementJSON;
-import com.elith.client.TraitementAbstract;
+import com.elith.authentification.Utilisateur;
+import com.elith.authentification.UtilisateurDAO;
 import com.elith.clinique.ItemAbstract;
 import com.elith.clinique.ItemJSON;
 import com.elith.erreur.ErrorResponse;
 import java.security.Principal;
-import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.SecurityContext;
 
@@ -23,7 +21,7 @@ import javax.ws.rs.core.SecurityContext;
  */
 public class UtilitaireAPI {
     
-     
+       
     public static int extractIdClinique(SecurityContext securityContext){
         int idClinique;
         Principal principal = securityContext.getUserPrincipal();
@@ -32,6 +30,22 @@ public class UtilitaireAPI {
         return idClinique ;        
     }
     
+    /*
+    private static String extractLogin(SecurityContext securityContext){
+        Principal principal = securityContext.getUserPrincipal();
+        Token monToken = new Token(principal.getName());        
+       return monToken.getUsernameFromPrincipal();        
+    }
+*/
+    
+    public static int extractIdUser(SecurityContext securityContext){
+        int idUser;
+        Principal principal = securityContext.getUserPrincipal();
+        Token monToken = new Token(principal.getName());
+        idUser = monToken.getIdUserFromPrincipal();
+        System.out.println("idUser " + idUser);
+        return idUser ;        
+    }
     
     public static ItemJSON itemToJSON(ItemJSON itemJSON, List<ItemAbstract> listeItems, ErrorResponse erreur){  
         itemJSON.setErrorResponse(erreur);

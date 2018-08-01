@@ -13,6 +13,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
@@ -41,6 +43,8 @@ public class UtilisateurResource {
     public UtilisateurResource() {
     }
 
+    
+        
     /**
      * Retrieves representation of an instance of com.elith.authentification.UtilisateurResource
      * @return an instance of java.lang.String
@@ -100,13 +104,7 @@ public class UtilisateurResource {
         return Response.status(200).entity(output).build();
     }
     
-    @PUT
-    @Path("/test")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void test(Utilisateur util){
-        System.out.println("test");
-    }
-    
+   
     
     @DELETE
     @Path("/delete/{id}")
