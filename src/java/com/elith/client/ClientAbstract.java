@@ -51,6 +51,7 @@ public abstract class ClientAbstract implements Serializable  {
     
     // ajout du nom complet pour la recherche
     protected String nomComplet;
+    protected String telephoneChiffre;
     
     // ajout d'un champ pour faciliter la gestion de la date de naissance
     protected String dateNaissanceString;
@@ -97,6 +98,7 @@ public abstract class ClientAbstract implements Serializable  {
     public abstract String getNote();
     public abstract String getConstipation();
     public abstract String getNomComplet();
+    public abstract String getTelephoneChiffre();
     public abstract String getDateNaissanceString();
     
     public abstract int getIdClinique();
@@ -137,6 +139,7 @@ public abstract class ClientAbstract implements Serializable  {
     public abstract void setNote(String note);
     public abstract void setConstipation(String constipation);  
     public abstract void setNomComplet(String nomComplet);
+    public abstract void setTelephoneChiffre(String telephoneChiffre);
     public abstract void setDateNaissanceString(String dateNaissanceString);
     
     public abstract void setIdClinique(int idClinique);

@@ -9,6 +9,9 @@ import com.elith.util.ConversionType;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -91,6 +94,7 @@ public class Client extends ClientAbstract implements Serializable  {
         this.note = note ;
         this.constipation = constipation;
         this.nomComplet = this.prenom + " " + this.nom ;
+        this.telephoneChiffre = obtenirJusteChiffre(this.telephone);
         this.dateNaissanceString = ConversionType.DateToString(new java.sql.Date(dateNaissance.getTime()));
               
         this.idClinique = idClinique;
@@ -167,6 +171,8 @@ public class Client extends ClientAbstract implements Serializable  {
     public String getConstipation(){return (constipation != null ? constipation : "");}
     @Override
     public String getNomComplet(){return nomComplet;}
+    @Override
+    public String getTelephoneChiffre(){return telephoneChiffre;}
     @Override
     public String getDateNaissanceString(){return dateNaissanceString;}
     
@@ -247,6 +253,8 @@ public class Client extends ClientAbstract implements Serializable  {
     @Override
     public void setNomComplet(String nomComplet){this.nomComplet = nomComplet;}
     @Override
+    public void setTelephoneChiffre(String telephoneChiffre){this.telephoneChiffre = telephoneChiffre;}
+    @Override
     public void setDateNaissanceString(String dateNaissanceString){this.dateNaissanceString = dateNaissanceString;}
    
     
@@ -260,4 +268,22 @@ public class Client extends ClientAbstract implements Serializable  {
     
     @Override
     public boolean isNil() { return false;  }
+    
+    private String obtenirJusteChiffre(String telephone){
+        String telChiffre = "" ;
+        
+        try {
+            if(telephone != null){
+                Pattern p = Pattern.compile("[0-9]");
+                Matcher m = p.matcher(telephone);
+                while(m.find()){
+                    telChiffre += telephone.substring(m.start(), m.end());
+                }  
+            }
+            
+        }catch(PatternSyntaxException e){         
+        }
+
+        return telChiffre ;
+    }
 }

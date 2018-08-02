@@ -91,6 +91,8 @@ public class ClientNull extends ClientAbstract implements Serializable {
     @Override
     public String getNomComplet(){return "";}
     @Override
+    public String getTelephoneChiffre(){return "";}
+    @Override
     public String getDateNaissanceString(){return "";}
    
      @Override
@@ -168,6 +170,8 @@ public class ClientNull extends ClientAbstract implements Serializable {
     public void setConstipation(String constipation){}  
     @Override
     public void setNomComplet(String nomComplet){}
+     @Override
+    public void setTelephoneChiffre(String telephoneChiffre){}
     @Override
     public void setDateNaissanceString(String dateNaissanceString){}
    
