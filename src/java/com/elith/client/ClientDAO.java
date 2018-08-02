@@ -51,17 +51,23 @@ public class ClientDAO {
             "cardiaque, hypoglycemie, asthme, diabete, allergies, autre, histooperations, " +
             "histodouleur, constatations, attentions, pasmasser, fumeur, peau, arthrose, osteoporose, note, constipation " +
             "FROM client WHERE idclinique = ? ";
-     private static final String CLIENT_FINDBY_ID = "SELECT idclient, nom, prenom, adresse, ville, codepostal, telephone, " +
+    private static final String CLIENT_FINDBY_ID = "SELECT idclient, nom, prenom, adresse, ville, codepostal, telephone, " +
             "email, datenaissance, enfants, emploi, loisirs, refere, autrestherapies, medicaments, complements, " +
             "cardiaque, hypoglycemie, asthme, diabete, allergies, autre, histooperations, " +
             "histodouleur, constatations, attentions, pasmasser, fumeur, peau, arthrose, osteoporose, note, constipation, idclinique " +
             "FROM client WHERE idclient = ? and idclinique = ? ";
-     private static final String CLIENT_FINDBY_NOM = "SELECT idclient, nom, prenom, adresse, ville, codepostal, telephone, " +
+    private static final String CLIENT_FINDBY_NOM = "SELECT idclient, nom, prenom, adresse, ville, codepostal, telephone, " +
             "email, datenaissance, enfants, emploi, loisirs, refere, autrestherapies, medicaments, complements, " +
             "cardiaque, hypoglycemie, asthme, diabete, allergies, autre, histooperations, " +
             "histodouleur, constatations, attentions, pasmasser, fumeur, peau, arthrose, osteoporose, note, constipation " +
             "FROM client WHERE ((upper(nom) like ? OR upper(prenom) like ?) AND idclinique = ? )" +
             "ORDER by nom, prenom";
+    private static final String CLIENT_FINDBY_TELEPHONE = "SELECT idclient, nom, prenom, adresse, ville, codepostal, telephone, " +
+            "email, datenaissance, enfants, emploi, loisirs, refere, autrestherapies, medicaments, complements, " +
+            "cardiaque, hypoglycemie, asthme, diabete, allergies, autre, histooperations, " +
+            "histodouleur, constatations, attentions, pasmasser, fumeur, peau, arthrose, osteoporose, note, constipation " +
+            "FROM client WHERE (telephone like ? AND idclinique = ? )" +
+            "ORDER by nom, prenom";    
     private static final String CLIENT_DELETE = "DELETE FROM client WHERE idclient = ? and idclinique = ?"; 
 
     
@@ -159,6 +165,84 @@ public class ClientDAO {
             prepStmt.setString(1, nom.toUpperCase() + "%");
             prepStmt.setString(2, nom.toUpperCase() + "%");
             prepStmt.setInt(3, idclinique);
+            result = prepStmt.executeQuery();
+            while (result.next()) {
+                client = new Client(result.getInt("idclient"),
+                        result.getString("nom"),
+                        result.getString("prenom"),
+                        result.getString("adresse"),
+                        result.getString("ville"),
+                        result.getString("codepostal"),
+                        result.getString("telephone"),
+                        result.getString("email"),
+                        result.getDate("datenaissance"),
+                        result.getInt("enfants"),
+                        result.getString("emploi"),
+                        result.getString("loisirs"),
+                        result.getString("refere"),
+                        result.getString("autrestherapies"),
+                        result.getString("medicaments"),
+                        result.getString("complements"),
+                        result.getBoolean("cardiaque"),
+                        result.getBoolean("hypoglycemie"),
+                        result.getBoolean("asthme"),
+                        result.getBoolean("diabete"),
+                        result.getString("allergies"),
+                        result.getString("autre"),
+                        result.getString("histooperations"),
+                        result.getString("histodouleur"),
+                        result.getString("constatations"),
+                        result.getString("attentions"),
+                        result.getString("pasmasser"),
+                        result.getBoolean("fumeur"),
+                        result.getBoolean("peau"),
+                        result.getBoolean("arthrose"),
+                        result.getBoolean("osteoporose"),
+                        result.getString("note"),
+                        result.getString("constipation"),
+                        idclinique);
+                
+                liste.add(client);
+            }
+            
+        } catch (SQLException e) {
+            throw new DAOException("Liste des clients impossible a obtenir!" + e);
+        } finally {
+            try {
+                if (result != null) {
+                    result.close();
+                }
+            } catch (SQLException e) {
+                throw new DAOException("Probleme a la fermeture du ResultSet " + e);
+            }
+            try {
+                if (prepStmt != null) {
+                    prepStmt.close();
+                }
+            } catch (SQLException e) {
+                throw new DAOException("Probleme a la fermeture du PreparedStatement " + e);
+            }
+            try {
+                if (con != null) {
+                    con.close();
+                }
+            } catch (SQLException e) {
+                throw new DAOException("Probleme a la fermeture de la connexion " + e);
+            }
+        }
+        return liste;
+    }
+    
+    public List<Client> findByTelephone(String telephone, int idclinique) throws DAOException {
+        List<Client> liste = new ArrayList();
+        Connection con = getConnection();
+        PreparedStatement prepStmt = null;
+        ResultSet result = null;
+        Client client;
+        try {
+            prepStmt = con.prepareStatement(CLIENT_FINDBY_TELEPHONE);
+            prepStmt.setString(1, "%" + telephone + "%");
+            prepStmt.setInt(2, idclinique);
             result = prepStmt.executeQuery();
             while (result.next()) {
                 client = new Client(result.getInt("idclient"),
