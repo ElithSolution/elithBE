@@ -5,10 +5,9 @@
  */
 package com.elith.client;
 
-import com.elith.erreur.ErrorResponse;
+
 import java.io.Serializable;
 import java.util.Date;
-import javax.ws.rs.core.Response;
 
 /**
  *

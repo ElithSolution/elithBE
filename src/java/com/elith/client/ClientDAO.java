@@ -568,7 +568,6 @@ public class ClientDAO {
         Connection con = getConnection();
         PreparedStatement prepStmt = null;
         int k = 0;
-
     
         java.util.Date dateNais = ConversionType.StringToDate(client.getDateNaissanceString());
         java.sql.Date dateNaisSQL = new java.sql.Date(dateNais.getTime());
@@ -601,15 +600,13 @@ public class ClientDAO {
             prepStmt.setString(n++, client.getHistoDouleur());
             prepStmt.setString(n++, client.getConstatations());
             prepStmt.setString(n++, client.getAttentions());
-            prepStmt.setString(n++, client.getPasMasser());
-            
+            prepStmt.setString(n++, client.getPasMasser());            
             prepStmt.setBoolean(n++, client.getFumeur());
             prepStmt.setBoolean(n++, client.getPeau());
             prepStmt.setBoolean(n++, client.getArthrose());
             prepStmt.setBoolean(n++, client.getOsteoporose());
             prepStmt.setString(n++, client.getNote());
-            prepStmt.setString(n++, client.getConstipation());
-            
+            prepStmt.setString(n++, client.getConstipation());            
             prepStmt.setInt(n++, client.getId());
             k = prepStmt.executeUpdate();
 
@@ -645,7 +642,7 @@ public class ClientDAO {
         Connection con = getConnection();
         PreparedStatement prepStmt = null;
         int n = 0;
-        int idClient = 0 ;
+        int idClient;
         try {
             idClient = Integer.parseInt(id);
         }catch(NumberFormatException e){

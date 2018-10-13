@@ -167,7 +167,7 @@ public class TraitementDAO {
 
         if(traitement != null){
         
-                 java.util.Date dateVisite = ConversionType.StringToDate(traitement.getDateVisiteString());
+                java.util.Date dateVisite = ConversionType.StringToDate(traitement.getDateVisiteString());
                 java.sql.Date dateVisiteSQL = new java.sql.Date(dateVisite.getTime());
 
                 try {
@@ -184,10 +184,12 @@ public class TraitementDAO {
                     prepStmt.setString(n++, traitement.getCommentaires());
                     prepStmt.setInt(n++, traitement.getLogin());
                     prepStmt.setFloat(n++, traitement.getPrix());
-                    prepStmt.setString(n++, traitement.getModePaiement());
+                    System.out.println("mode de paiement : " + traitement.getModePaiement());
+                    prepStmt.setInt(n++, 1);
                     prepStmt.setInt(n++, traitement.getKm());
                     prepStmt.setBoolean(n++, traitement.getDomicile());
-                    prepStmt.setString(n++, traitement.getTarif());
+                    //prepStmt.setString(n++, traitement.getTarif());
+                    prepStmt.setInt(n++, 1);
                     prepStmt.setFloat(n++, traitement.getFraisKm());
                     prepStmt.setFloat(n++, traitement.getTps());
                     prepStmt.setFloat(n++, traitement.getTvq());
@@ -218,7 +220,7 @@ public class TraitementDAO {
             Connection con = getConnection();
             PreparedStatement prepStmt = null;
             int k = 0;
-
+           
             if(traitement != null) {
                 java.util.Date dateVisite = ConversionType.StringToDate(traitement.getDateVisiteString());
                 java.sql.Date dateVisiteSQL = new java.sql.Date(dateVisite.getTime());
@@ -234,18 +236,18 @@ public class TraitementDAO {
                     prepStmt.setString(n++, traitement.getCommentaires());
                     prepStmt.setInt(n++, traitement.getLogin());
                     prepStmt.setFloat(n++, traitement.getPrix());
-                    prepStmt.setString(n++, traitement.getModePaiement());
+                    prepStmt.setInt(n++, Integer.parseInt(traitement.getModePaiement()));
                     prepStmt.setInt(n++, traitement.getKm());
-                    prepStmt.setBoolean(n++, traitement.getDomicile());
-                    prepStmt.setString(n++, traitement.getTarif());
+                    prepStmt.setBoolean(n++, traitement.getDomicile());                    
+                    prepStmt.setInt(n++, Integer.parseInt(traitement.getTarif()));                                       
                     prepStmt.setFloat(n++, traitement.getFraisKm());
                     prepStmt.setFloat(n++, traitement.getTps());
                     prepStmt.setFloat(n++, traitement.getTvq());
                     prepStmt.setString(n++, traitement.getNumCertificat());
                     prepStmt.setBoolean(n++, traitement.getArchive());
-                    prepStmt.setInt(n++, traitement.getId());                    
+                    prepStmt.setInt(n++, traitement.getId());  
                     k = prepStmt.executeUpdate();
-
+         
                 } catch (SQLException e) {
                     throw new DAOException("Mise a jour du traitement " + traitement.getId() + " impossible !" + e);
                 } finally {
@@ -265,7 +267,7 @@ public class TraitementDAO {
                     }
                 }
         } // if(traitement != null)
-        return k == 1 ? true : false;
+        return k == 1 ;
     }
 
     public Traitement findById(String id, int idclinique) throws DAOException {
@@ -355,7 +357,7 @@ public class TraitementDAO {
                 throw new DAOException("Probleme a la fermeture de la connexion " + e);
             }
         }
-        return n == 1 ? true : false;
+        return n == 1;
     }
 
     public List<Traitement> getAllTraitementClient(int idClient, int idClinique) throws DAOException {

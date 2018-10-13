@@ -39,6 +39,7 @@ public class TraitementResource {
     private UriInfo context;
     
     private TraitementDAO traitementDAO;
+    private TypeXDAO typeXDAO ;
     private ErrorResponse error = new ErrorResponse(200, Response.Status.OK) ;
 
 
@@ -50,6 +51,8 @@ public class TraitementResource {
 
     /**
      * Retrieves representation of an instance of com.elith.client.TraitementResource
+     * @param id
+     * @param securityContext
      * @return an instance of java.lang.String
      */  
     @GET
@@ -143,18 +146,20 @@ public class TraitementResource {
         try{
             
             if(traitement != null){
-                traitementDAO = new TraitementDAO();
-                
+                traitementDAO = new TraitementDAO();                
                 if(traitementDAO.existeTraitementById(traitement.getId())){                    
-                    traitementDAO.updateTraitement(traitement);
+                    
+                    traitement.setModePaiement(this.obtenirIdTypeX("paiement", traitement.getModePaiement(), idClinique));                    
+                    traitement.setTarif(this.obtenirIdTypeX("tarif", traitement.getTarif(), idClinique));
+                    
+                    traitementDAO.updateTraitement(traitement);           
                     traitementMaJ = getTraitement(String.valueOf(traitement.getId()), idClinique);
+                    System.out.println("traiement màj : " + traitement.getId());
                     if(traitementMaJ.isNil())error = new ErrorResponse(403, Response.Status.FORBIDDEN);
-                // pas de client
-                
+                                
                 }else{                    
                     error = new ErrorResponse(204, Response.Status.NO_CONTENT); 
-                } 
-                
+                }          
             }              
           
         } catch (DAOException e) {
@@ -214,5 +219,49 @@ public class TraitementResource {
             traitement = new TraitementNull();     
         }
         return traitement ;
+    }
+    
+    private String obtenirIdTypeX(String type, String label, int idClinique){
+        List<TypeX> listeTypes = null ; 
+        String res = "1" ;
+        
+        if(type != null){
+                           
+                listeTypes = this.obtenirListeTypeX(type, idClinique);                
+                if(listeTypes != null){
+                boolean trouve = false;
+                int i = 0 ;
+                    while(!trouve && i < listeTypes.size()){
+                        String element = listeTypes.get(i).getIntitule();
+                        if(element.equals(label)){
+                            trouve = true ;
+                            res = String.valueOf(listeTypes.get(i).getIdType());
+                        }
+                        i++;
+                    }
+                }
+        }   
+  
+       return res ;
+    }
+        
+        
+    private List<TypeX> obtenirListeTypeX(String type, int idClinique){
+        List<TypeX> listeTypes ; 
+        
+         try{           
+            if(type != null){
+                if(type.equals("paiement")){
+                    typeXDAO = new TypeXDAO("idtypepaiement", "paiement", "typepaiement", "ordre", idClinique);
+                }else if(type.equals("tarif")){
+                    typeXDAO = new TypeXDAO("idtypetarif", "tarif", "typetarif", "ordre", idClinique);
+                }
+            }             
+            listeTypes = typeXDAO.getAllTypeX();            
+                 
+        }catch(DAOException e){
+            listeTypes = null ;
+        }
+    return listeTypes ;
     }
 }

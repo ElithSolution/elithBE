@@ -51,6 +51,8 @@ public class ClientResource {
 
     /**
      * Retrieves representation of an instance of com.elith.client.ClientResource
+     * @param id
+     * @param securityContext
      * @return an instance of java.lang.String
      */
     @GET
@@ -137,7 +139,6 @@ public class ClientResource {
                     client.setIdClinique(idClinique);
                     clientDAO.create(client);
                     int cle = clientDAO.maxCle();
-                    System.out.println("Clé : " + cle);
                     client.setId(cle);
 
                     clientMaJ = getClient(String.valueOf(client.getId()), idClinique, client.getTraitements());
@@ -157,7 +158,6 @@ public class ClientResource {
      * PUT method for updating or creating an instance of ClientsResource
      * @param securityContext
      * @param client
-     * @param content representation for the resource
      * @return 
      */
     @PUT

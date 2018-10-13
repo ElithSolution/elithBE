@@ -39,6 +39,7 @@ public class ApplicationConfig extends Application {
         resources.add(com.elith.client.ClientResource.class);
         resources.add(com.elith.client.ClientsResource.class);
         resources.add(com.elith.client.TraitementResource.class);
+        resources.add(com.elith.client.TypeXResource.class);
         resources.add(com.elith.clinique.CliniqueResource.class);
         resources.add(com.elith.clinique.CliniquesResource.class);
     }

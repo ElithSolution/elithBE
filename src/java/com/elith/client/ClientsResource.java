@@ -8,10 +8,8 @@ package com.elith.client;
 import com.elith.API.UtilitaireAPI;
 import com.elith.authentification.Role;
 import com.elith.authentification.Secured;
-import com.elith.authentification.Token;
 import com.elith.connexion.DAOException;
 import com.elith.erreur.ErrorResponse;
-import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ws.rs.core.Context;
@@ -88,7 +86,6 @@ public class ClientsResource {
 
     /**
      * PUT method for updating or creating an instance of ClientsResource
-     * @param content representation for the resource
      */
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
