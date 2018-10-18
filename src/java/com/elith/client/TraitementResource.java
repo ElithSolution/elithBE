@@ -85,38 +85,19 @@ public class TraitementResource {
         try{
             
             if(traitement != null){
-                
-                System.out.println("traitement  raison : "+ traitement.getRaison());
-                System.out.println("traitement  traitement : "+ traitement.getTraitement());
-                System.out.println("traitement  conseils : "+ traitement.getConseils());
-                System.out.println("traitement  commentaires : "+ traitement.getCommentaires());
-                System.out.println("traitement  datevisite : "+ traitement.getDateVisiteString());
-                System.out.println("traitement  domicile : "+ traitement.getDomicile());
-                System.out.println("traitement  fraiskm : "+ traitement.getFraisKm());
-                System.out.println("traitement  km : "+ traitement.getKm());
-                System.out.println("traitement  domicile : "+ traitement.getDomicile());
-                System.out.println("traitement  tarif : "+ traitement.getTarif());
-            
-                System.out.println("traitement  tps : "+ traitement.getTps());
-                System.out.println("traitement  tvq : "+ traitement.getTvq());
-                System.out.println("traitement  certif : "+ traitement.getNumCertificat());
-                System.out.println("traitement  archive : "+ traitement.getArchive());
-                System.out.println("traitement  idclient : "+ traitement.getIdClient());
-                System.out.println("traitement  mode de paiement : "+ traitement.getModePaiement());
-                System.out.println("traitement  prix : "+ traitement.getPrix());
-                
-                
-                          
-                 traitementDAO = new TraitementDAO();
+              
+                traitementDAO = new TraitementDAO();
                       
                 // ajout des informations complémentaires
                 traitement.setIdClinique(idClinique);
                 traitement.setLogin(idUser);
+                // conversion pour les types de données
+                traitement.setModePaiement(this.obtenirIdTypeX("paiement", traitement.getModePaiement(), idClinique));                    
+                traitement.setTarif(this.obtenirIdTypeX("tarif", traitement.getTarif(), idClinique));
                 
           
                 // ajout du traitement
                 traitementDAO.create(traitement);
-                System.out.println("traitement créé");
                 int cle = traitementDAO.maxCle();
                 traitement.setId(cle);
                 traitementMaJ = getTraitement(String.valueOf(traitement.getId()), idClinique);

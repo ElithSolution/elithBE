@@ -184,19 +184,16 @@ public class TraitementDAO {
                     prepStmt.setString(n++, traitement.getCommentaires());
                     prepStmt.setInt(n++, traitement.getLogin());
                     prepStmt.setFloat(n++, traitement.getPrix());
-                    System.out.println("mode de paiement : " + traitement.getModePaiement());
-                    prepStmt.setInt(n++, 1);
+                    prepStmt.setInt(n++, Integer.parseInt(traitement.getModePaiement()));
                     prepStmt.setInt(n++, traitement.getKm());
                     prepStmt.setBoolean(n++, traitement.getDomicile());
-                    //prepStmt.setString(n++, traitement.getTarif());
-                    prepStmt.setInt(n++, 1);
+                    prepStmt.setInt(n++, Integer.parseInt(traitement.getTarif()));  
                     prepStmt.setFloat(n++, traitement.getFraisKm());
                     prepStmt.setFloat(n++, traitement.getTps());
                     prepStmt.setFloat(n++, traitement.getTvq());
                     prepStmt.setString(n++, traitement.getNumCertificat());
                     prepStmt.setBoolean(n++, traitement.getArchive());
                     prepStmt.setInt(n++, traitement.getIdClinique());
-                    System.out.println(prepStmt);
                     prepStmt.executeUpdate();
 
                 } catch (SQLException e) {
